@@ -1,0 +1,16 @@
+Package: SensShiny
+Title: Shiny solutions for Sensory Analysis and Consumer Tests
+Version: 0.0.0
+Authors@R: as.person(c(
+    "Eduardo Elias Ribeiro Junior <edujrrib@gmail.com> [aut, cre]"))
+Description: This package contains wrappers functions for building web
+    interfaces, implemented in shiny, to collect data from sensory and
+    consumer experiments.
+Depends: R (>= 3.3.1)
+License: GPL-3
+URL: https://github.com/JrEduardo/SensShiny
+BugReports: https://github.com/JrEduardo/SensShiny/issues
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
