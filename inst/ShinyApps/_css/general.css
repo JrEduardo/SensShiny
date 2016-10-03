@@ -1,0 +1,150 @@
+/*------------------------------------------- */
+/* General */
+body, td, caption {
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    background-color: white;
+    color: #000;
+    font-size: 18px;
+}
+
+body {
+    max-width: 800px;
+    margin: auto;
+    line-height: 22px;
+}
+
+.footer {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 0.8em;
+    color: #333;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+}
+
+/*------------------------------------------- */
+/* Sessions */
+h1.title {
+    /* color: #333; */
+    background-color: #fff;
+    font-weight: bold;
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: -0.4em;
+}
+
+h3.author {
+    text-align: center;
+    font-style: italic;
+    font-size: 18px;
+}
+
+/*------------------------------------------- */
+/* Lines */
+hr {
+    height: 0px;
+    border-bottom: none;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: #999999;
+}
+
+hr.white {
+    border-top-color: #FFFFFF;
+    margin: 20px
+}
+
+
+/*------------------------------------------- */
+/* Codes */
+tt, code, pre {
+    font-family: "Inconsolata", "Andale Mono", monospace;
+}
+
+code, pre {
+    font-size: 14px;
+}
+
+pre {
+    border: 0px;
+    word-break: unset;
+    word-wrap: unset;
+}
+
+/* Blocos de código criados com tripla crase. */
+pre code {
+    display: block;
+    padding: 0.5em;
+    line-height: 125%;
+}
+
+/* Código sem classe, inline e blocos de warning e error do R. */
+code {
+    background-color: #F2F2F2;
+    color: #000;
+}
+
+/* Código de classe R, input, output, exceto warnings e errors. */
+code[class] {
+    background-color: #F2F2F2;
+}
+
+/*------------------------------------------- */
+/* For responsive layouts */
+@media print {
+    * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+       font-size:12pt;
+       max-width:100%;
+   }
+
+   a, a:visited {
+       text-decoration: underline;
+   }
+
+   hr {
+       visibility: hidden;
+       page-break-before: always;
+   }
+
+   pre, blockquote {
+       padding-right: 1em;
+       page-break-inside: avoid;
+   }
+
+   tr, img {
+       page-break-inside: avoid;
+   }
+
+   img {
+       max-width: 100% !important;
+   }
+
+   @page :left {
+       margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+       margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+       orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+       page-break-after: avoid;
+   }
+}
+
+/*------------------------------------------- */
+/* Layouts widgets */
+.btn {
+    width: 100%;
+}
