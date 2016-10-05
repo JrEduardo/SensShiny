@@ -4,6 +4,7 @@ path <- system.file("ShinyApps", package = "SensShiny")
 
 ## Arguments
 attributes <- ## INSERT-NAMES-ATTR ##
+attributes <- sample(attributes)
 shortattr <- paste0("attr", 1:length(attributes))
 max_time <- ## INSERT-MAX-TIME ##
 
