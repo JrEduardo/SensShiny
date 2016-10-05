@@ -166,6 +166,12 @@ shinyServer(
         })
 
         ##-------------------------------------------
+        ## Interrompe o processo R da interface
+        observeEvent(input$STOP, {
+            stopApp()
+        })
+
+        ##-------------------------------------------
         ## Controle do tempo de experimento
         autoInvalidate <- reactiveTimer(1000)
         observe({
