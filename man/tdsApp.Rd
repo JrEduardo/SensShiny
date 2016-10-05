@@ -5,7 +5,14 @@
 \title{Web Interface for a Temporal Dominance of Sensations
     Experiment}
 \usage{
-tdsApp()
+tdsApp(attributes, max_time = 60)
+}
+\arguments{
+\item{attributes}{A vector names representing the attributes that
+compose a sensory analysis.}
+
+\item{max_time}{A numeric representing a max time, in seconds,
+allowed for each consumer.}
 }
 \value{
 Open the web browser for show the shiny interface.
