@@ -13,7 +13,7 @@ shinyUI(
            class = "author"),
         hr(),
         hr(class = "white"),
-        verbatimTextOutput("test"),
+        ## verbatimTextOutput("test"),
         uiOutput("START"),
         htmlOutput("FOOTER")
     )

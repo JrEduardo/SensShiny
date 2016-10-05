@@ -3,13 +3,12 @@
 path <- system.file("ShinyApps", package = "SensShiny")
 
 ## Arguments
-atributos <- paste("Atributo", LETTERS[1:4])
-max_time <- 60
+attributes <- ## INSERT-NAMES-ATTR ##
+shortattr <- paste0("attr", 1:length(attributes))
+max_time <- ## INSERT-MAX-TIME ##
 
 ##======================================================================
 ## Elementos estáticos da interface
-
-shortattr <- paste0("attr", 1:length(atributos))
 
 ## For build the fields about consumer and sample for fill
 InformationField0 <- fluidRow(
@@ -79,13 +78,12 @@ TimeField <- column(
 )
 
 ## Build help experiment
-HelpField <- tagList(
-    includeMarkdown(paste0(path, "/_mds/TDS.md"))
-)
+mdhelp <- includeMarkdown(paste0(path, "/_mds/TDS.md"))
+HelpField <- gsub("## MAX-TIME ##", max_time, mdhelp)
 
 ## Finish Page
 FisinhField <- tagList(
-    HTML("THANKS"),
+    h2("OBRIGADO PELA SUA CONTRIBUIÇÃO!"),
     br(),
     fluidRow(
         column(
@@ -132,7 +130,7 @@ shinyServer(
         va <- reactiveValues(
             init = 0,
             time = Sys.time(),
-            attributes = atributos,
+            attributes = attributes,
             shortattr = shortattr
         )
 
@@ -205,38 +203,6 @@ shinyServer(
         ##-------------------------------------------
         ## Salva os dados de tempos e atributos sentidos
         ## INSERT-REACTIVE-HERE ##
-        observeEvent(input$attr1, {
-            time <- as.numeric(
-                difftime(Sys.time(), isolate(va$time), units = "secs"))
-            da$sample <- c(isolate(da$sample), input$SAMPLE)
-            da$consumer <- c(isolate(da$consumer), input$CONSUMER)
-            da$attribute <- c(isolate(da$attribute), atributos[1])
-            da$time <- c(isolate(da$time), time)
-        })
-        observeEvent(input$attr2, {
-            time <- as.numeric(
-                difftime(Sys.time(), isolate(va$time), units = "secs"))
-            da$sample <- c(isolate(da$sample), input$SAMPLE)
-            da$consumer <- c(isolate(da$consumer), input$CONSUMER)
-            da$attribute <- c(isolate(da$attribute), atributos[2])
-            da$time <- c(isolate(da$time), time)
-        })
-        observeEvent(input$attr3, {
-            time <- as.numeric(
-                difftime(Sys.time(), isolate(va$time), units = "secs"))
-            da$sample <- c(isolate(da$sample), input$SAMPLE)
-            da$consumer <- c(isolate(da$consumer), input$CONSUMER)
-            da$attribute <- c(isolate(da$attribute), atributos[3])
-            da$time <- c(isolate(da$time), time)
-        })
-        observeEvent(input$attr4, {
-            time <- as.numeric(
-                difftime(Sys.time(), isolate(va$time), units = "secs"))
-            da$sample <- c(isolate(da$sample), input$SAMPLE)
-            da$consumer <- c(isolate(da$consumer), input$CONSUMER)
-            da$attribute <- c(isolate(da$attribute), atributos[4])
-            da$time <- c(isolate(da$time), time)
-        })
 
         ##-------------------------------------------
         ## Transforma para data.frame para salvar em arquivo csv
@@ -268,30 +234,9 @@ shinyServer(
                     InformationField1,
                     HTML("<center>Lista de atributos</center>"),
                     br(),
-                    ## INSERT-BUTTONS-ATTR-HERE ##
-                    tagList(
-                        column(width = 3,
-                               actionButton(
-                                   inputId = va$shortattr[1],
-                                   label = va$attributes[1])
-                               ),
-                        column(width = 3,
-                               actionButton(
-                                   inputId = va$shortattr[2],
-                                   label = va$attributes[2])
-                               ),
-                        column(width = 3,
-                               actionButton(
-                                   inputId = va$shortattr[3],
-                                   label = va$attributes[3])
-                               ),
-                        column(width = 3,
-                               actionButton(
-                                   inputId = va$shortattr[4],
-                                   label = va$attributes[4])
-                               )
+                    fluidRow(
+                        ## INSERT-BUTTONS-ATTR-HERE ##
                     ),
-                    br(),
                     hr(class = "white")
                 )
             } else {
