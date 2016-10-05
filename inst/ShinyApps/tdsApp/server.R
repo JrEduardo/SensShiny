@@ -81,15 +81,31 @@ HelpField <- tagList(
 atributos <- paste("attr", LETTERS[1:4])
 shortattr <- paste0("attr", 1:length(atributos))
 
-AttributesField <- tagList(
-    lapply(
-        1:length(atributos), function(i) {
-            column(width = 3,
-                   actionButton(
-                       inputId = shortattr[i],
-                       label = atributos[i]
-                   ))
-        })
+## Finish Page
+FisinhField <- tagList(
+    HTML("THANKS"),
+    br(),
+    fluidRow(
+        column(
+            width = 4,
+            actionButton(
+                inputId = "NEXT",
+                label = "Próxima avaliação",
+                icon = icon("arrow-right"))
+        ),
+        column(
+            width = 4,
+            downloadButton(
+                outputId = "DOWNLOAD",
+                label = "Download dados")
+        ),
+        column(
+            width = 4,
+            actionButton(
+                inputId = "STOP",
+                label = "Stop interface")
+        )
+    )
 )
 
 ##======================================================================
@@ -106,14 +122,18 @@ shinyServer(
             cat("==============================\n", sep = "\n")
             print(reactiveValuesToList(da))
             cat("==============================\n", sep = "\n")
-            dt <- difftime(autoInvalidate(), va$time, units = "secs")
-            dt <- as.numeric(dt)
-            getwd()
+            va$shortattr[1]
+            ## va$attributes[1]
         })
 
         ##-------------------------------------------
         ## Controle de exibição
-        va <- reactiveValues(init = 0, time = Sys.time())
+        va <- reactiveValues(
+            init = 0,
+            time = Sys.time(),
+            attributes = atributos,
+            shortattr = shortattr
+        )
 
         ##-------------------------------------------
         ## Salvar dados
@@ -135,6 +155,15 @@ shinyServer(
         ## Finaliza o experimento ao pressionar 'Finalizar'
         observeEvent(input$DONE, {
             va$init <- 2
+        })
+
+        ##-------------------------------------------
+        ## Reinicia avaliação
+        observeEvent(input$NEXT, {
+            va$init <- 0
+            index <- sample(1:length(va$attributes))
+            va$shortattr <- va$shortattr[index]
+            va$attributes <- va$attributes[index]
         })
 
         ##-------------------------------------------
@@ -174,7 +203,7 @@ shinyServer(
 
         ##-------------------------------------------
         ## Salva os dados de tempos e atributos sentidos
-        ##
+        ## INSERT-REACTIVE-HERE ##
         observeEvent(input$attr1, {
             time <- as.numeric(
                 difftime(Sys.time(), isolate(va$time), units = "secs"))
@@ -222,12 +251,34 @@ shinyServer(
                     InformationField1,
                     HTML("<center>Lista de atributos</center>"),
                     br(),
-                    AttributesField,
+                    ## INSERT-BUTTONS-ATTR-HERE ##
+                    tagList(
+                        column(width = 3,
+                               actionButton(
+                                   inputId = va$shortattr[1],
+                                   label = va$attributes[1])
+                               ),
+                        column(width = 3,
+                               actionButton(
+                                   inputId = va$shortattr[2],
+                                   label = va$attributes[2])
+                               ),
+                        column(width = 3,
+                               actionButton(
+                                   inputId = va$shortattr[3],
+                                   label = va$attributes[3])
+                               ),
+                        column(width = 3,
+                               actionButton(
+                                   inputId = va$shortattr[4],
+                                   label = va$attributes[4])
+                               )
+                    ),
                     br(),
                     hr(class = "white")
                 )
             } else {
-                HTML("THANKS")
+                FisinhField
             }
         })
 
