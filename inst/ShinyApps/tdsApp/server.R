@@ -2,8 +2,14 @@
 ## server.R
 path <- system.file("ShinyApps", package = "SensShiny")
 
+## Arguments
+atributos <- paste("Atributo", LETTERS[1:4])
+max_time <- 60
+
 ##======================================================================
 ## Elementos estáticos da interface
+
+shortattr <- paste0("attr", 1:length(atributos))
 
 ## For build the fields about consumer and sample for fill
 InformationField0 <- fluidRow(
@@ -77,10 +83,6 @@ HelpField <- tagList(
     includeMarkdown(paste0(path, "/_mds/TDS.md"))
 )
 
-## AttributesField
-atributos <- paste("attr", LETTERS[1:4])
-shortattr <- paste0("attr", 1:length(atributos))
-
 ## Finish Page
 FisinhField <- tagList(
     HTML("THANKS"),
@@ -122,8 +124,7 @@ shinyServer(
             cat("==============================\n", sep = "\n")
             print(reactiveValuesToList(da))
             cat("==============================\n", sep = "\n")
-            va$shortattr[1]
-            ## va$attributes[1]
+            as.data.frame(reactiveValuesToList(da))
         })
 
         ##-------------------------------------------
@@ -172,7 +173,7 @@ shinyServer(
         observe({
             dt <- difftime(autoInvalidate(), va$time, units = "secs")
             dt <- as.numeric(dt)
-            if (dt > 180 & va$init == 1) {
+            if (dt > max_time & va$init == 1) {
                 va$init <- 2
             }
         })
@@ -192,13 +193,13 @@ shinyServer(
             ## Experiment time
             timer <- autoInvalidate()
             dt <- difftime(timer, isolate(va$time), units = "secs")
-            ## Finish experiment if diff time is bigger than 180
-            if (as.numeric(dt) > 180 & va$init == 1) {
+            ## Finish experiment if diff time is bigger than max_time
+            if (as.numeric(dt) > max_time & va$init == 1) {
                 va$init <- 2
             }
             ## Show the experiment time
             off <- ifelse(isolate(va$init) == 0, 0, dt)
-            format(.POSIXct(180 - off, tz = "GMT"), "%Mmin %Ssecs")
+            format(.POSIXct(max_time - off, tz = "GMT"), "%Mmin %Ssecs")
         })
 
         ##-------------------------------------------
@@ -208,7 +209,7 @@ shinyServer(
             time <- as.numeric(
                 difftime(Sys.time(), isolate(va$time), units = "secs"))
             da$sample <- c(isolate(da$sample), input$SAMPLE)
-            da$consumer <- c(isolate(da$assesor), input$CONSUMER)
+            da$consumer <- c(isolate(da$consumer), input$CONSUMER)
             da$attribute <- c(isolate(da$attribute), atributos[1])
             da$time <- c(isolate(da$time), time)
         })
@@ -216,7 +217,7 @@ shinyServer(
             time <- as.numeric(
                 difftime(Sys.time(), isolate(va$time), units = "secs"))
             da$sample <- c(isolate(da$sample), input$SAMPLE)
-            da$consumer <- c(isolate(da$assesor), input$CONSUMER)
+            da$consumer <- c(isolate(da$consumer), input$CONSUMER)
             da$attribute <- c(isolate(da$attribute), atributos[2])
             da$time <- c(isolate(da$time), time)
         })
@@ -224,7 +225,7 @@ shinyServer(
             time <- as.numeric(
                 difftime(Sys.time(), isolate(va$time), units = "secs"))
             da$sample <- c(isolate(da$sample), input$SAMPLE)
-            da$consumer <- c(isolate(da$assesor), input$CONSUMER)
+            da$consumer <- c(isolate(da$consumer), input$CONSUMER)
             da$attribute <- c(isolate(da$attribute), atributos[3])
             da$time <- c(isolate(da$time), time)
         })
@@ -232,10 +233,26 @@ shinyServer(
             time <- as.numeric(
                 difftime(Sys.time(), isolate(va$time), units = "secs"))
             da$sample <- c(isolate(da$sample), input$SAMPLE)
-            da$consumer <- c(isolate(da$assesor), input$CONSUMER)
+            da$consumer <- c(isolate(da$consumer), input$CONSUMER)
             da$attribute <- c(isolate(da$attribute), atributos[4])
             da$time <- c(isolate(da$time), time)
         })
+
+        ##-------------------------------------------
+        ## Transforma para data.frame para salvar em arquivo csv
+        output$DOWNLOAD <- downloadHandler(
+            filename = function() {
+                sufix <- format(Sys.time(), "%M%S")
+                paste0("data-", sufix, ".csv")
+            },
+            content = function(file) {
+                write.table(
+                    as.data.frame(reactiveValuesToList(da)),
+                    file = file,
+                    sep = ";",
+                    row.names = FALSE,
+                    quote = FALSE)
+            })
 
         ##-------------------------------------------
         ## Contrói toda a interface
