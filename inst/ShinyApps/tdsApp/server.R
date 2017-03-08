@@ -250,19 +250,7 @@ shinyServer(
                 FisinhField
             }
         })
-
         ##-------------------------------------------
         ## Rodapé
-        output$FOOTER <- renderPrint({
-            l1 <- paste("<code>SensShiny</code>: R Package version",
-                        packageVersion("lattice"))
-            l2 <- paste("URL: <a href=\"https://github.com/",
-                        "JrEduardo/SensShiny\">",
-                        "https://github.com/JrEduardo/SensShiny</a>")
-            l3 <- paste("Contact: <a ",
-                        "href=\"mailto:edujrrib@gmail.com\">",
-                        "edujrrib@gmail.com</a>")
-            cat("<div class=\"footer\">\n", l1, l2, l3, "<br/></div>",
-                sep = "<br/>")
-        })
+        ## INSERT-FOOTER ##
     })

@@ -14,7 +14,9 @@
 tdsApp <- function(attributes, max_time = 60) {
     ##-------------------------------------------
     ## Paths
-    pcpath <- system.file("ShinyApps", "tdsApp", package = "SensShiny")
+    pcauxi <- system.file("ShinyApps", package = "SensShiny")
+    pcpath <- paste0(pcauxi, "/tdsApp")
+    pcincl <- paste0(pcauxi, "/_includes")
     shpath <- tempdir()
     wdpath <- getwd()
     if (pcpath == "") {
@@ -24,6 +26,7 @@ tdsApp <- function(attributes, max_time = 60) {
     ## Read the shiny components
     server <- readLines(paste0(pcpath, "/server.R"))
     ui     <- readLines(paste0(pcpath, "/ui.R"))
+    footer <- readLines(paste0(pcincl, "/footer.R"))
     ##-------------------------------------------
     ## Create components that depend of the arguments
     REACTIVE <- lapply(1:length(attributes), function(i) {
@@ -49,13 +52,16 @@ tdsApp <- function(attributes, max_time = 60) {
     })
     REACTIVE <- do.call(paste, list(REACTIVE, collapse = "\n"))
     BUTTONSATTR <- do.call(paste, list(BUTTONSATTR, collapse = ",\n"))
+    FOOTER <- do.call(paste, list(footer, collapse = "\n"))
     ##-------------------------------------------
     ## Replace this components into server
     attnames <- paste0(capture.output(dput(attributes)), collapse = "")
     server <- gsub("## INSERT-NAMES-ATTR ##", attnames, server)
     server <- gsub("## INSERT-MAX-TIME ##", max_time, server)
     server <- gsub("## INSERT-REACTIVE-HERE ##", REACTIVE, server)
-    server <- gsub("## INSERT-BUTTONS-ATTR-HERE ##", BUTTONSATTR, server)
+    server <- gsub("## INSERT-BUTTONS-ATTR-HERE ##", BUTTONSATTR,
+                   server)
+    server <- gsub("## INSERT-FOOTER ##", FOOTER, server)
     ##-------------------------------------------
     ## Write the shiny components
     writeLines(server, paste0(shpath, "/server.R"))
