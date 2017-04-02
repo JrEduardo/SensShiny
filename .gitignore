@@ -1,5 +1,6 @@
 ## Directory for playground
 **/playground/*
+_check.R
 
 ## R backup files
 .Rproj.user

@@ -5,6 +5,7 @@
 
 ^\.travis.yml$
 playground/
+_check.R
 
 README.*
 LICENSE
