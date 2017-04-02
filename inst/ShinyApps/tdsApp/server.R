@@ -115,16 +115,16 @@ FisinhField <- tagList(
 shinyServer(
     function(input, output, session) {
 
-        ##-------------------------------------------
-        ## Test area
-        output$test <- renderPrint({
-            ## print(autoInvalidate())
-            print(reactiveValuesToList(va))
-            cat("==============================\n", sep = "\n")
-            print(reactiveValuesToList(da))
-            cat("==============================\n", sep = "\n")
-            as.data.frame(reactiveValuesToList(da))
-        })
+        ## ##-------------------------------------------
+        ## ## Test area
+        ## output$test <- renderPrint({
+        ##     ## print(autoInvalidate())
+        ##     print(reactiveValuesToList(va))
+        ##     cat("==============================\n", sep = "\n")
+        ##     print(reactiveValuesToList(da))
+        ##     cat("==============================\n", sep = "\n")
+        ##     as.data.frame(reactiveValuesToList(da))
+        ## })
 
         ##-------------------------------------------
         ## Controle de exibição
@@ -141,7 +141,8 @@ shinyServer(
             consumer = NULL,
             sample = NULL,
             time = NULL,
-            attribute = NULL
+            attribute = NULL,
+            general = NULL
         )
 
         ##-------------------------------------------
@@ -181,6 +182,14 @@ shinyServer(
             if (dt > max_time & va$init == 1) {
                 va$init <- 2
             }
+        })
+
+        ##-------------------------------------------
+        ## Nota final
+        observeEvent(input$CONFIRM, {
+            index <- is.na(da$general)
+            da$general[index] <- input$GRADE
+            va$init <- 3
         })
 
         ##-------------------------------------------
@@ -245,6 +254,26 @@ shinyServer(
                         ## INSERT-BUTTONS-ATTR-HERE ##
                     ),
                     hr(class = "white")
+                )
+            } else if (va$init == 2) {
+                fluidRow(
+                    column(width = 8,
+                           sliderInput(
+                               inputId = "GRADE",
+                               label = "Nota geral",
+                               min = 1,
+                               max = 9,
+                               value = 5,
+                               width = "100%")
+                           ),
+                    column(width = 3, offset = 1,
+                           HTML(paste0("<label class='control-label'",
+                                      ">Confirma nota:</label><br>")),
+                           actionButton(
+                               inputId = "CONFIRM",
+                               label = "Confirm",
+                               class = "btn btn-primary")
+                           )
                 )
             } else {
                 FisinhField

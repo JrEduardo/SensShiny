@@ -46,6 +46,7 @@ tdsApp <- function(attributes, max_time = 60, shiny_dir = tempdir()) {
             da$attribute <- c(isolate(da$attribute),
                               attributes[", i, "])
             da$time <- c(isolate(da$time), time)
+            da$general <- c(isolate(da$general), NA)
         })")
     })
     BUTTONSATTR <- lapply(1:length(attributes), function(i) {
