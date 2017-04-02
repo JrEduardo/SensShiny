@@ -10,4 +10,3 @@ The SensShiny package contains wrappers functions for
     building web interfaces, implemented in shiny, to collect data
     from sensory and consumer experiments.
 }
-
